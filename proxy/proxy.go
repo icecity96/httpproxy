@@ -30,11 +30,17 @@ func handle(w http.ResponseWriter, r *http.Request) {
 	case "www.taobao.com":
 		w.Write([]byte("<h1>垃圾淘宝，毁我青春，耗我钱财，颓我精神</h1>"))
 	default:
-		resp, err := http.DefaultClient.Get(r.URL.String())
-		defer resp.Body.Close()
+		// RequestURI is the unmodified Request-URI of the
+		// Request-Line (RFC 2616, Section 5.1) as sent by the client
+		// to a server. Usually the URL field should be used instead.
+		// It is an error to set this field in an HTTP client request.
+		//
+		r.RequestURI = ""
+		resp, err := http.DefaultClient.Do(r)
 		if err != nil {
 			panic(err)
 		}
+		defer resp.Body.Close()
 		for k, v := range resp.Header {
 			for _, vv := range v {
 				w.Header().Add(k,vv)
