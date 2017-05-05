@@ -7,5 +7,3 @@ import (
 func main() {
 	proxy.NewProxy(":8888")
 }
-
-
